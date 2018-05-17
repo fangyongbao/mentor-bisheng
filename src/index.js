@@ -81,7 +81,7 @@ exports.start = function start(program) {
   if (program.router === 'local') {
     doraConfig.plugins.push(path.join(process.cwd(), '../dora-mentor-server'));
   } else if (program.router === 'prod') {
-    require.resolve('dora-mentor-server')
+    doraConfig.plugins.push(require.resolve('dora-mentor-server'));
   }
   const usersDoraPlugin = bishengConfig.doraConfig.plugins || [];
   doraConfig.plugins = doraConfig.plugins.concat(usersDoraPlugin);
