@@ -78,9 +78,9 @@ exports.start = function start(program) {
     path.join(__dirname, 'dora-plugin-bisheng'),
     require.resolve('dora-plugin-browser-history'),
   ];
-  if (program.router === 'local') {
+  if (program.optype === 'local') {
     doraConfig.plugins.push(path.join(process.cwd(), '../dora-mentor-server'));
-  } else if (program.router === 'prod') {
+  } else if (program.optype === 'prod') {
     doraConfig.plugins.push(require.resolve('dora-mentor-server'));
   }
   const usersDoraPlugin = bishengConfig.doraConfig.plugins || [];
