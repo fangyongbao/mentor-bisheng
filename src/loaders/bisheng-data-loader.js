@@ -12,14 +12,30 @@ module.exports = function bishengDataLoader(/* content */) {
   }
 
   const bishengConfig = context.bishengConfig;
+
+  // 获取 bisheng plugin && router
   const themeConfig = getThemeConfig(bishengConfig.theme);
 
+  // change 
+  // { 'mo-org-tree': '/Users/yongbao.fyb/Desktop/mentor/mentor-component/mo-org-tree/document' } to
+  // { 'mo-org-tree': { 
+  //     api: '/Users/yongbao.fyb/Desktop/mentor/mentor-component/mo-org-tree/document/api.md',
+  //     demo: {
+  //       basic: '/Users/yongbao.fyb/Desktop/mentor/mentor-component/mo-org-tree/document/demo/basic.md'
+  //     }
+  // },
   const markdown = sourceData.generate(bishengConfig.source, bishengConfig.transformers);
   const browserPlugins = resolvePlugins(themeConfig.plugins, 'browser');
+
+  // pluginsString:
+  // [require('/Users/yongbao.fyb/Desktop/mentor/mentor-cli/node_modules/_mentor-bisheng@0.24.8@mentor-bisheng/lib/bisheng-plugin-highlight/lib/browser.js'), {}],
+  // [require('/Users/yongbao.fyb/Desktop/mentor/mentor-cli/node_modules/bisheng-plugin-react/lib/browser.js'), {"lang":"__react"}],
+  // [require('/Users/yongbao.fyb/Desktop/mentor/mentor-cli/node_modules/bisheng-plugin-antd/lib/browser.js'), {}]
   const pluginsString = browserPlugins
           .map(plugin => `[require('${plugin[0]}'), ${JSON.stringify(plugin[1])}]`)
           .join(',\n');
 
+  // async为webpack自定义loader api，代表异步返回loader结果
   const callback = this.async();
 
   const picked = {};
@@ -57,18 +73,28 @@ module.exports = function bishengDataLoader(/* content */) {
     });
   }
 
-  Promise.all(pickedPromises)
-    .then(() => {
-      const sourceDataString = sourceData.stringify(markdown, {
-        lazyLoad: themeConfig.lazyLoad,
-      });
-      callback(
-        null,
-        'module.exports = {' +
-          `\n  markdown: ${sourceDataString},` +
-          `\n  picked: ${JSON.stringify(picked, null, 2)},` +
-          `\n  plugins: [\n${pluginsString}\n],` +
-          '\n};',
-      );
+
+  // back: 返回的md， 会经过source-loader处理
+  //'document': {
+  //  'mo-org-tree': {
+  //    'api': require('/Users/yongbao.fyb/Desktop/mentor/mentor-cli/node_modules/_mentor-bisheng@0.24.8@mentor-bisheng/lib/loaders/source-loader!/Users/yongbao.fyb/Desktop/mentor/mentor-component/mo-org-tree/document/api.md'),
+  //    'demo': {
+  //      'basic': require('/Users/yongbao.fyb/Desktop/mentor/mentor-cli/node_modules/_mentor-bisheng@0.24.8@mentor-bisheng/lib/loaders/source-loader!/Users/yongbao.fyb/Desktop/mentor/mentor-component/mo-org-tree/document/demo/basic.md'),
+  //    },
+  //  },
+  //};
+  Promise.all(pickedPromises).then(() => {
+    const sourceDataString = sourceData.stringify(markdown, {
+      lazyLoad: themeConfig.lazyLoad,
     });
+    callback(
+      null,
+      'module.exports = {' +
+        `\n  markdown: ${sourceDataString},` +
+        `\n  picked: ${JSON.stringify(picked, null, 2)},` +
+        `\n  plugins: [\n${pluginsString}\n],` +
+        '\n};',
+    );
+  });
 };
+

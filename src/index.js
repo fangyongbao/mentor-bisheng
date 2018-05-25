@@ -19,6 +19,8 @@ const routesTemplate = fs.readFileSync(path.join(__dirname, 'routes.nunjucks.js'
 const tmpDirPath = path.join(__dirname, '..', 'tmp');
 mkdirp.sync(tmpDirPath);
 
+
+// 生成 routers.index.js
 function getRoutesPath(configPath, themePath, configEntryName) {
   const routesPath = path.join(tmpDirPath, `routes.${configEntryName}.js`);
   const themeConfig = require(escapeWinPath(configPath)).themeConfig || {};
@@ -32,6 +34,8 @@ function getRoutesPath(configPath, themePath, configEntryName) {
   return routesPath;
 }
 
+
+// 生成 entry.index.js
 function generateEntryFile(configPath, configTheme, configEntryName, root) {
   const entryPath = path.join(tmpDirPath, `entry.${configEntryName}.js`);
   const routesPath = getRoutesPath(
@@ -75,9 +79,12 @@ exports.start = function start(program) {
       cwd: process.cwd(),
       config: 'bisheng-inexistent.config.js',
     }],
+    // 自定义dora-plugin-bisheng解析md文件
     path.join(__dirname, 'dora-plugin-bisheng'),
     require.resolve('dora-plugin-browser-history'),
   ];
+
+  // 自定义dora-mentor-server处理mentor-cli数据请求。添加optype === local, 便于本地开发调试
   if (program.optype === 'local') {
     doraConfig.plugins.push(path.join(process.cwd(), '../dora-mentor-server'));
   } else if (program.optype === 'prod') {

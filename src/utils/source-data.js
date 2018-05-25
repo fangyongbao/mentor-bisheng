@@ -193,7 +193,10 @@ exports.process = (
   });
   const transformer = transformers[transformerIndex];
 
+  // md文件首次解析
   const markdown = require(transformer.use)(filename, fileContent);
+
+  // md文件通过bisheng-plugin依次解析获取最终数据
   const parsedMarkdown = plugins.reduce(
     (markdownData, plugin) =>
       require(plugin[0])(markdownData, plugin[1], isBuild === true),

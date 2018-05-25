@@ -6,6 +6,7 @@ const context = require('../context');
 const boss = require('./common/boss');
 
 module.exports = function sourceLoader(content) {
+
   if (this.cacheable) {
     this.cacheable();
   }

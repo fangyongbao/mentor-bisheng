@@ -14,6 +14,8 @@ module.exports = function updateWebpackConfig(webpackConfig) {
     webpackConfig.output.path = bishengConfig.output;
   }
   webpackConfig.output.publicPath = context.isBuild ? bishengConfig.root : '/';
+
+  // 自定义 bisheng-data-loader 解析 uitls/data.js。 entry.index.js中引入了 util/data.js
   webpackConfig.module.loaders.push({
     test(filename) {
       return filename === path.join(bishengLib, 'utils', 'data.js') ||
