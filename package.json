@@ -1,6 +1,6 @@
 {
   "name": "mentor-bisheng",
-  "version": "0.24.9",
+  "version": "0.24.10",
   "description": "Transform Markdown(and other static files with transformers) into a SPA website using React.",
   "bin": {
     "bisheng": "./bin/bisheng"
@@ -44,6 +44,7 @@
     "babel-polyfill": "^6.9.1",
     "commander": "^2.9.0",
     "dora": "^0.4.0",
+    "dora-mentor-server": "^0.0.2",
     "dora-plugin-browser-history": "^0.2.0",
     "dora-plugin-livereload": "^0.5.2",
     "dora-plugin-webpack": "^0.8.1",
