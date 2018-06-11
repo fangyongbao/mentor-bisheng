@@ -20,7 +20,7 @@ const tmpDirPath = path.join(__dirname, '..', 'tmp');
 mkdirp.sync(tmpDirPath);
 
 
-// 生成 routers.index.js
+// 在tmp目录下生成 routers.index.js（路由配置）
 function getRoutesPath(configPath, themePath, configEntryName) {
   const routesPath = path.join(tmpDirPath, `routes.${configEntryName}.js`);
   const themeConfig = require(escapeWinPath(configPath)).themeConfig || {};
@@ -35,7 +35,7 @@ function getRoutesPath(configPath, themePath, configEntryName) {
 }
 
 
-// 生成 entry.index.js
+//  在tmp目录下生成 entry.index.js（入口文件）
 function generateEntryFile(configPath, configTheme, configEntryName, root) {
   const entryPath = path.join(tmpDirPath, `entry.${configEntryName}.js`);
   const routesPath = getRoutesPath(
@@ -53,15 +53,21 @@ function generateEntryFile(configPath, configTheme, configEntryName, root) {
 }
 
 exports.start = function start(program) {
+
+  // 获取bisheng配置文件
   const configFile = path.join(process.cwd(), program.config || 'bisheng.config.js');
   const bishengConfig = getBishengConfig(configFile);
   context.initialize({ bishengConfig });
+
+  // 创建静态资源输出目录
   mkdirp.sync(bishengConfig.output);
 
+  // _site下生成模板文件
   const template = fs.readFileSync(bishengConfig.htmlTemplate).toString();
   const templatePath = path.join(process.cwd(), bishengConfig.output, 'index.html');
   fs.writeFileSync(templatePath, nunjucks.renderString(template, { root: '/' }));
 
+  // 生成入口文件 entry.index.js
   generateEntryFile(
     configFile,
     bishengConfig.theme,
@@ -69,10 +75,13 @@ exports.start = function start(program) {
     '/',
   );
 
+  // dora配置（webpack配置、markdown解析）
   const doraConfig = Object.assign({}, {
+    // 指定dora服务根目录为bishengConfig.output
     cwd: path.join(process.cwd(), bishengConfig.output),
     port: bishengConfig.port,
   }, bishengConfig.doraConfig);
+  // 配置dora插件
   doraConfig.plugins = [
     [require.resolve('dora-plugin-webpack'), {
       disableNpmInstall: true,
