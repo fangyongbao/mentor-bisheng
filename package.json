@@ -40,6 +40,7 @@
   },
   "homepage": "https://github.com/fangyongbao/mentor-bisheng",
   "dependencies": {
+    "@alipay/mentor-mark-twain": "2",
     "atool-build": "^0.9.0",
     "babel-polyfill": "^6.9.1",
     "commander": "^2.9.0",
@@ -54,7 +55,6 @@
     "jsonml-to-react-element": "^1.0.0",
     "jsonml.js": "^0.1.0",
     "loader-utils": "^0.2.14",
-    "mark-twain": "^2.0.0",
     "mkdirp": "^0.5.1",
     "node-prismjs": "^0.1.0",
     "nprogress": "^0.2.0",
