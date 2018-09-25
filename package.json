@@ -1,5 +1,5 @@
 {
-  "name": "mentor-bisheng",
+  "name": "@alipay/mentor-bisheng",
   "version": "0.24.10",
   "description": "Transform Markdown(and other static files with transformers) into a SPA website using React.",
   "bin": {
@@ -13,7 +13,7 @@
   ],
   "scripts": {
     "build": "babel src --out-dir lib",
-    "pub": "npm run build && git tag ${npm_package_version} && git push origin ${npm_package_version} && npm publish && rimraf lib"
+    "pub": "tnpm run build && git tag ${npm_package_version} && git push origin ${npm_package_version} && tnpm publish && rimraf lib"
   },
   "babel": {
     "presets": [
@@ -21,10 +21,6 @@
       "react",
       "stage-0"
     ]
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/fangyongbao/mentor-bisheng"
   },
   "keywords": [
     "markdown",
@@ -35,10 +31,6 @@
   ],
   "author": "gubao",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/fangyongbao/mentor-bisheng/issues"
-  },
-  "homepage": "https://github.com/fangyongbao/mentor-bisheng",
   "dependencies": {
     "@alipay/mentor-mark-twain": "2",
     "atool-build": "^0.9.0",
@@ -78,5 +70,8 @@
   },
   "engines": {
     "node": ">=6.0.0"
+  },
+  "publishConfig": {
+    "registry": "http://registry.npm.alibaba-inc.com"
   }
 }
